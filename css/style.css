@@ -4686,6 +4686,18 @@ input[type=number] {
 	background-color: #ff451b;
 }
 
+.iknow_tm_news .news_list .image { position: relative; overflow: hidden; }
+.iknow_tm_news .news_list .image .news-img{
+  display:block;
+  width:100%;
+  height:auto;          /* full image, no cropping */
+  border-radius:10px;   /* matches your card rounding */
+}
+
+/* Hide old fixed-ratio shim if any remain in other cards */
+.iknow_tm_news .news_list .image .main { display:none; }
+.iknow_tm_news .news_list .image img[src*="img/thumbs/"] { display:none; }
+
 /*---------------------------------------------------*/
 /*	21) IKNOW MEDIA QUERIES (FOR SMALL DEVICES)
 /*---------------------------------------------------*/
@@ -5073,4 +5085,151 @@ input[type=number] {
 	.iknow_tm_modalbox .close .svg{width: 25px;height: 25px;}
 	.iknow_tm_modalbox .close{margin-left: 0px;left: auto;right: 0px;top: -35px;}
 
+}
+
+/* Updates cards — show real <img> instead of background */
+.iknow_tm_news .news_list .image .news-img{
+  opacity: 1 !important;    /* override theme's hidden <img> */
+  display: block;
+  width: 100%;
+  height: auto;              /* preserve full image (no crop) */
+  border-radius: 10px;
+}
+
+/* Make sure the old background elements don't sit on top */
+.iknow_tm_news .news_list .image .main{ 
+  display: none !important; 
+}
+.iknow_tm_news .news_list .image img[src*="img/thumbs/"]{ 
+  display: none !important; 
+}
+
+/* Updates grid: make card heights feel consistent without cropping */
+.iknow_tm_news .news_list .image{
+  position: relative;
+  overflow: hidden;
+}
+
+/* Full image, but cap extreme heights so rows look even */
+.iknow_tm_news .news_list .image .news-img{
+  display: block;
+  width: 100%;
+  height: auto;            /* keep full image (no crop) */
+  max-height: 420px;       /* adjust to taste: 360–480px are common */
+  object-fit: contain;     /* letterbox if needed, but no cropping */
+}
+
+/* Optional: slightly different caps per breakpoint */
+@media (max-width: 1024px){
+  .iknow_tm_news .news_list .image .news-img{ max-height: 360px; }
+}
+@media (max-width: 640px){
+  .iknow_tm_news .news_list .image .news-img{ max-height: 300px; }
+}
+
+/* === UPDATES: switch float grid -> flex grid (preserve order 1..9) === */
+.iknow_tm_news .news_list ul{
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 24px;                 /* row + column spacing */
+  margin: 0;                 /* kill the negative left margin in the theme */
+  padding: 0;
+  list-style: none;
+}
+
+.iknow_tm_news .news_list ul > li{
+  float: none !important;    /* kill floats */
+  width: calc(33.333% - 16px);  /* 3 columns; the -16px roughly offsets gap math */
+  padding-left: 0 !important;
+}
+
+/* Responsive columns */
+@media (max-width: 1024px){
+  .iknow_tm_news .news_list ul > li{
+    width: calc(50% - 12px);   /* 2 columns on tablets */
+  }
+}
+@media (max-width: 640px){
+  .iknow_tm_news .news_list ul > li{
+    width: 100%;
+  }
+}
+
+
+/* Keep TOP of this specific hero image visible on larger screens */
+.iknow_tm_hero_third .background .image[data-img-url="img/hero/8.jpg"]{
+  background-position: top center !important; /* was center center */
+  background-size: cover !important;
+}
+
+/* Mobile tweak: recentre a bit so nothing critical is cut in cramped viewports */
+@media (max-width: 640px){
+  .iknow_tm_hero_third .background .image[data-img-url="img/hero/8.jpg"]{
+    background-position: center !important; /* or try 50% 20% if you want slightly higher framing */
+  }
+}
+
+/* -----------------------------------------
+   CONSTANTS: set your desktop topbar height
+------------------------------------------*/
+:root{
+  --tb-h: 110px;          /* desktop topbar height; tweak if yours is different */
+}
+
+/* Desktop: show TOPBAR fixed; hide mobile bar; reserve space for it */
+@media (min-width: 1025px){
+  .iknow_tm_mobile_menu{ display: none !important; }
+
+  .iknow_tm_topbar{
+    position: fixed !important;   /* stick to the top on scroll */
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: saturate(180%) blur(8px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* push content down by the bar’s height so it never hides underneath */
+  .iknow_tm_content_wrapper{ padding-top: var(--tb-h) !important; }
+}
+
+/* Mobile/Tablet: keep mobile bar fixed; hide desktop topbar; reserve space */
+@media (max-width: 1024px){
+  .iknow_tm_topbar{ display: none !important; }
+
+  .iknow_tm_mobile_menu{
+    display: block !important;
+    position: fixed !important;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+  }
+
+  /* match your mobile header height; you already used ~80px earlier */
+  .iknow_tm_content_wrapper{ padding-top: 80px !important; }
+}
+
+/* Keep logos bounded */
+.iknow_tm_topbar .logo img{ max-width: 135px; max-height: 80px; }
+.iknow_tm_mobile_menu .mobile_in .logo img{ max-width: 90px; max-height: 60px; }
+
+
+/* Hero badges row */
+.iknow_tm_hero_third .content .hero-badges{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;      /* space below the name */
+  flex-wrap: wrap;       /* if more badges later, they wrap nicely */
+}
+
+/* Badge sizing: fixed height, auto width to avoid distortion */
+.iknow_tm_hero_third .content .hero-badges .badge{
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+/* Scale up a touch on larger screens */
+@media (min-width: 1024px){
+  .iknow_tm_hero_third .content .hero-badges .badge{ height: 56px; }
 }
